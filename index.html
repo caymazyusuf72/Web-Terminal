@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAYMAZ Terminal | Yapım Aşamasında – Hacker Terminal</title>
+  <meta name="description" content="Deneysel Linux terminal arayüzü, yoğun animasyon efektleri ve erişilebilirlik ayarları." />
+  <meta name="robots" content="noindex, nofollow" />
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=7cLdGq5MINlz7mQ9poZ6yrQgB8DlVE3iXyMNV1ktOHvaBl5OQ-1e8yCBvMOPMlulzAoQgVvBltTidyxSxeyCH2t7DD6nLxBPJ1cAW_DhyMdo1NtuiKJGFfRQx_EE5A4ASkqMv5kNymK5ZynIQZLNpkjzG8TRUJWy1qf1HMgDcaNH_mjZVwcuBO6m_aA_qa3kgQgQulNBoqHLUU-XpZKA0PWcn4_jWr1BvbaVWgFux3LfHwYB2IqzR66-qFQw-MNiYvLXtqq6queJdWhz2jTgQw" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jZG4uZGlzY29yZGFwcC5jb20vYXR0YWNobWVudHMvMTM3NDE0MzQzODk1Nzg0MjQzMi8xNDA5MzUyMTg0NzEzMTg3Mzk4L2luZGV4Lmh0bWw_ZXg9NjhhZDExMDEmaXM9NjhhYmJmODEmaG09ZTFlZDZiNzU2OWRhNzJmZjFiZjA4OGI4OTBkZmJmNDBhNmEwZjdhZWRjNDgxZjU3YTUyNjFmOWU0OWJjNTRiZCY"/><style>
+    :root{
+      --bg:#06090b;
+      --panel:#0b1114;
+      --txt:#c6f6c6;
+      --txt-dim:#7bbf7b;
+      --accent:#9effa1;
+      --danger:#ff6b81;
+      --edge:#16412a;
+      --focus:#eaffea;
+      --glow: #45ff5a;
+      --purple: #d946ef;
+      --blue: #3b82f6;
+      --orange: #f97316;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--txt);font-family:ui-monospace,Menlo,Consolas,monospace;overflow:hidden;position:relative}
+
+    /* Matrix Background */
+    #fx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center, rgba(13,25,15,0.3) 0%, transparent 70%)}
+
+    /* Cyberpunk Grid */
+    .cyber-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(69,255,90,0.1) 1px, transparent 1px),linear-gradient(90deg, rgba(69,255,90,0.1) 1px, transparent 1px);background-size:50px 50px;opacity:0.3}
+
+    /* Floating particles */
+    .particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+    .particle{position:absolute;width:2px;height:2px;background:var(--glow);border-radius:50%;opacity:0.6;animation:float 6s infinite ease-in-out}
+    @keyframes float{0%,100%{transform:translateY(0px) rotate(0deg)}50%{transform:translateY(-20px) rotate(180deg)}}
+
+    .wrap{position:relative; z-index:1; height:100%; display:grid; grid-template-rows:auto 1fr auto; backdrop-filter:blur(1px)}
+
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:2px solid var(--edge);background:linear-gradient(135deg, #07100b, #0a1a0f);box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+    .brand{display:flex;align-items:center;gap:.6ch;font-weight:800;font-family:'Orbitron',monospace;text-shadow:0 0 10px var(--glow)}
+    .brand span:first-child{animation:pulse 2s infinite;filter:drop-shadow(0 0 5px var(--glow))}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+
+    .badge{font-size:12px;color:var(--glow);border:1px solid var(--glow);padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.12em;background:rgba(69,255,90,0.1);box-shadow:0 0 15px rgba(69,255,90,0.3);animation:badge-glow 3s infinite}
+    @keyframes badge-glow{0%,100%{box-shadow:0 0 15px rgba(69,255,90,0.3)}50%{box-shadow:0 0 25px rgba(69,255,90,0.6)}}
+
+    .controls{display:flex;flex-wrap:wrap;gap:8px}
+    .toggle{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg, #0c1a12, #0f1f15);border:1px solid var(--edge);border-radius:10px;padding:7px 10px;transition:all 0.3s ease;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
+    .toggle:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,0,0,0.4)}
+
+    .toggle input{appearance:none;width:36px;height:20px;border-radius:999px;position:relative;outline:none;cursor:pointer;background:#132a1b;border:1px solid #1e4a2d;transition:all 0.3s ease}
+    .toggle input:checked{background:linear-gradient(45deg, var(--glow), #2dd150);box-shadow:0 0 10px rgba(69,255,90,0.5)}
+    .toggle input::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#eaffea;transition:transform .3s cubic-bezier(0.68, -0.55, 0.265, 1.55);box-shadow:0 2px 5px rgba(0,0,0,0.3)}
+    .toggle input:checked::after{transform:translateX(16px);background:radial-gradient(circle, #ffffff, #eaffea)}
+    .toggle label{font-size:12px;color:#bde8bd;font-weight:600}
+
+    .term-wrap{display:grid;grid-template-rows:1fr auto;gap:10px;padding:14px;height:calc(100vh - 98px)}
+    .panel{border:2px solid var(--edge);background:linear-gradient(180deg, var(--panel), #0a120f);border-radius:12px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;box-shadow:0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)}
+
+    .panelHead{display:flex;align-items:center;gap:8px;padding:10px 12px;background:linear-gradient(135deg, #06110b, #0a1a10);border-bottom:1px solid var(--edge)}
+    .led{width:12px;height:12px;border-radius:50%;background:#2a3e2f;box-shadow:0 0 0 1px #1a2e22 inset;transition:all 0.3s ease}
+    .led.on{background:radial-gradient(circle, var(--glow), #2dd150);box-shadow:0 0 20px rgba(69,255,90,0.8),0 0 0 1px #1a2e22 inset;animation:led-pulse 2s infinite}
+    @keyframes led-pulse{0%,100%{box-shadow:0 0 20px rgba(69,255,90,0.8)}50%{box-shadow:0 0 30px rgba(69,255,90,1)}}
+
+    .terminal{position:relative;height:100%;overflow:auto;padding:16px;background:repeating-linear-gradient(to bottom, rgba(11,15,16,0.9) 0 22px, rgba(10,22,16,0.9) 22px 23px);backdrop-filter:blur(2px)}
+    .terminal pre{margin:0;white-space:pre-wrap;word-wrap:break-word;line-height:1.4}
+    .terminal::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, rgba(69,255,90,0.05), transparent 50%);pointer-events:none}
+
+    .prompt{color:var(--accent);text-shadow:0 0 5px var(--accent)}
+    .muted{color:var(--txt-dim)}
+    .err{color:var(--danger);animation:error-flash 0.5s}
+    .danger{color:var(--danger);text-shadow:0 0 5px var(--danger)} /* EKLENDİ: eksik sınıf */
+    @keyframes error-flash{0%,100%{opacity:1}50%{opacity:0.6}}
+    .success{color:var(--glow);text-shadow:0 0 5px var(--glow)}
+    .warning{color:var(--orange);text-shadow:0 0 5px var(--orange)}
+    .info{color:var(--blue);text-shadow:0 0 5px var(--blue)}
+    .rainbow{background:linear-gradient(45deg, #ff6b81, var(--orange), #ffd93d, var(--glow), var(--blue), var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:rainbow-shift 3s infinite}
+    @keyframes rainbow-shift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+    .cmd{display:flex;align-items:center;gap:10px;border:2px solid var(--edge);background:linear-gradient(135deg, #0a1410, #0d1a12);border-radius:10px;padding:10px;transition:all 0.3s ease;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+    .cmd:focus-within{border-color:var(--glow);box-shadow:0 0 20px rgba(69,255,90,0.3), 0 4px 15px rgba(0,0,0,0.3)}
+    .cmd .p{color:var(--accent);font-weight:700;text-shadow:0 0 5px var(--accent)}
+    .cmd input{flex:1;background:transparent;border:none;color:var(--txt);font:inherit;outline:none;text-shadow:0 0 2px rgba(255,255,255,0.3)}
+    .cmd input::placeholder{color:#6ea36e;opacity:0.7}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{border:1px solid var(--edge);background:linear-gradient(135deg, #0b1711, #0f1e14);color:#bde8bd;padding:6px 12px;border-radius:999px;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);font-size:12px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+    .chip:hover{transform:translateY(-2px) scale(1.05);background:linear-gradient(135deg, var(--glow), #2dd150);color:#000;box-shadow:0 8px 25px rgba(69,255,90,0.3)}
+    .chip:active{transform:translateY(0) scale(0.95)}
+
+    footer{border-top:2px solid var(--edge);padding:10px 14px;color:#8dbf8d;font-size:12px;display:flex;justify-content:space-between;gap:10px;background:linear-gradient(135deg, rgba(7,16,11,0.9), rgba(10,26,15,0.9));backdrop-filter:blur(5px)}
+
+    /* Çılgın mod animasyonları */
+    .crazy-mode{animation:crazy-bg 0.5s infinite alternate}
+    @keyframes crazy-bg{0%{filter:hue-rotate(0deg) saturate(1.2)}100%{filter:hue-rotate(360deg) saturate(1.8)}}
+
+    .glitch{filter:contrast(1.5) saturate(2) hue-rotate(90deg);animation:glitch-shake 0.1s infinite}
+    @keyframes glitch-shake{0%{transform:translate(0,0)}25%{transform:translate(-2px,-1px)}50%{transform:translate(2px,1px)}75%{transform:translate(-1px,2px)}100%{transform:translate(1px,-2px)}}
+
+    .shake{animation:mega-shake .5s ease-in-out}
+    @keyframes mega-shake{0%{transform:translate(0,0) rotate(0deg)}20%{transform:translate(6px,-4px) rotate(2deg)}40%{transform:translate(-6px,4px) rotate(-2deg)}60%{transform:translate(4px,3px) rotate(1deg)}80%{transform:translate(-4px,-3px) rotate(-1deg)}100%{transform:translate(0,0) rotate(0deg)}}
+
+    .scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg, transparent 0 2px, rgba(69,255,90,0.1) 2px 4px);mix-blend-mode:overlay;opacity:.2;z-index:2;animation:scan-line 2s linear infinite}
+    @keyframes scan-line{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+
+    .high-contrast{--txt:#ffffff;--txt-dim:#cccccc;--accent:#ffffff;--bg:#000000;--panel:#111111;--glow:#ffffff}
+    .reduced-motion *{transition:none !important;animation:none !important}
+
+    /* Typing effect */
+    .typing{border-right:2px solid var(--glow);animation:blink 1s infinite}
+    @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+    /* Loading spinner */
+    .spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--txt-dim);border-top:2px solid var(--glow);border-radius:50%;animation:spin 0.8s linear infinite}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+    /* Easter egg styles */
+    .matrix-rain{color:var(--glow);text-shadow:0 0 5px var(--glow)}
+    .disco{background:linear-gradient(45deg, #ff0080, #00ff80, #8000ff, #ff8000);background-size:400% 400%;animation:disco 0.5s ease-in-out infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    @keyframes disco{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    /* Screen flash */
+    .flash{animation:screen-flash 0.1s}
+    @keyframes screen-flash{0%,100%{background:var(--bg)}50%{background:rgba(255,255,255,0.1)}}
+
+    /* Neon glow effect */
+    .neon{text-shadow:0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor, 0 0 20px currentColor}
+
+    /* Hologram effect */
+    .hologram{background:linear-gradient(45deg, transparent 30%, rgba(69,255,90,0.1) 50%, transparent 70%);background-size:200% 200%;animation:hologram-scan 3s linear infinite}
+    @keyframes hologram-scan{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  </style>
+</head>
+<body>
+  <canvas id="fx"></canvas>
+  <div class="cyber-grid"></div>
+  <div class="particles" id="particles"></div>
+  <div class="scan" aria-hidden="true"></div>
+
+  <div class="wrap" id="root">
+    <div class="topbar" role="toolbar" aria-label="Ayarlar ve durum">
+      <div class="brand">
+        <span>⚡</span>
+        <span>Terminal++</span>
+        <span class="badge">Yapım Aşamasında</span>
+      </div>
+      <div class="controls">
+        <div class="toggle"><input id="sound" type="checkbox" role="switch" aria-checked="true" checked><label for="sound">Ses</label></div>
+        <div class="toggle"><input id="motion" type="checkbox" role="switch" aria-checked="true" checked><label for="motion">Animasyon</label></div>
+        <div class="toggle"><input id="contrast" type="checkbox" role="switch" aria-checked="false"><label for="contrast">Yüksek Kontrast</label></div>
+        <div class="toggle"><input id="crazy" type="checkbox" role="switch" aria-checked="false"><label for="crazy">Çılgın Mod</label></div>
+      </div>
+    </div>
+
+    <main class="term-wrap">
+      <section class="panel" aria-label="Linux terminal simülasyonu">
+        <div class="panelHead">
+          <span class="led on" id="led"></span>
+          <strong class="muted">/dev/terminal</strong>
+          <div style="margin-left:auto;font-size:10px;color:#6ea36e" id="stats">CPU: <span id="cpu">0</span>% | RAM: <span id="ram">0</span>MB</div>
+        </div>
+        <div class="terminal" id="terminal" role="log" aria-live="polite" aria-atomic="false">
+          <pre id="screen"></pre>
+        </div>
+        <div class="cmd" aria-label="Komut satırı">
+          <span class="p" id="p">user@terminal:~/deploy$</span>
+          <input id="cli" placeholder="komut yazın (help ile başlayın)" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="chips" aria-label="Hızlı komutlar">
+          <button class="chip" data-cmd="help">help</button>
+          <button class="chip" data-cmd="figlet HACKER">figlet</button>
+          <button class="chip" data-cmd="calc 1337+666">calc</button>
+          <button class="chip" data-cmd="password 12">password</button>
+          <button class="chip" data-cmd="qrcode https://github.com">qrcode</button>
+          <button class="chip" data-cmd="sl">sl</button>
+          <button class="chip" data-cmd="neofetch">neofetch</button>
+          <button class="chip" data-cmd="ping google.com">ping</button>
+          <button class="chip" data-cmd="portscan google.com">portscan</button>
+          <button class="chip" data-cmd="weather istanbul">weather</button>
+          <button class="chip" data-cmd="whois google.com">whois</button>
+          <button class="chip" data-cmd="crypto">crypto</button>
+          <button class="chip" data-cmd="speedtest">speedtest</button>
+          <button class="chip" data-cmd="news">news</button>
+          <button class="chip" data-cmd="clear">clear</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© <span id="year"></span> Terminal++ • Terminal ++ 🔥</div>
+      <div class="muted">Kısayollar: M (ses), A (anim), C (kontrast), Z (çılgın) | Gizli: konami, sudo, rm -rf</div>
+    </footer>
+  </div>
+
+<script>
+// ---------- Yardımcılar
+const qs = (s, sc = document) => sc.querySelector(s);
+const qsa = (s, sc = document) => sc.querySelectorAll(s);
+const screen = qs('#screen');
+const term = qs('#terminal');
+const cli = qs('#cli');
+const led = qs('#led');
+const fx = qs('#fx');
+const particles = qs('#particles');
+
+// ---------- Tercihler
+let pref = {
+  sound: true,
+  motion: true,
+  contrast: false,
+  crazy: false,
+};
+
+function setPref(k, v) {
+  pref[k] = v;
+  applyPrefs();
+}
+
+function applyPrefs() {
+  document.body.classList.toggle('reduced-motion', !pref.motion);
+  document.body.classList.toggle('high-contrast', pref.contrast);
+  document.body.classList.toggle('crazy-mode', pref.crazy);
+}
+
+function bindToggle(id, key) {
+  const el = qs('#' + id);
+  el.checked = !!pref[key];
+  el.setAttribute('aria-checked', String(el.checked));
+  el.addEventListener('change', () => {
+    setPref(key, el.checked);
+    el.setAttribute('aria-checked', String(el.checked));
+  });
+}
+['sound', 'motion', 'contrast', 'crazy'].forEach(k => bindToggle(k, k));
+
+// ---------- Ses sistemi
+let audioCtx;
+const sounds = {
+  beep: (f = 420, d = 0.05, g = 0.02, type = 'square') => {
+    if (!pref.sound) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const gn = audioCtx.createGain();
+      o.type = type;
+      o.frequency.value = f;
+      gn.gain.value = g;
+      o.connect(gn);
+      gn.connect(audioCtx.destination);
+      o.start();
+      setTimeout(() => o.stop(), d * 1000);
+    } catch (e) { /* sessizce geç */ }
+  },
+  error: () => sounds.beep(120, 0.1, 0.03, 'sawtooth'),
+  success: () => sounds.beep(880, 0.05, 0.02, 'sine'),
+  warning: () => sounds.beep(330, 0.08, 0.03, 'triangle'),
+  explosion: () => {
+    sounds.beep(60, 0.3, 0.08, 'sawtooth');
+    setTimeout(() => sounds.beep(40, 0.2, 0.06, 'square'), 100);
+  },
+  hack: () => {
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => sounds.beep(200 + i * 50, 0.05, 0.02, 'square'), i * 50);
+    }
+  }
+};
+
+// ---------- Yazdırma sistemi
+function printLine(t = '', className = '') {
+  const line = document.createElement('div');
+  line.textContent = t;
+  if (className) line.className = className;
+  screen.appendChild(line);
+  term.scrollTop = term.scrollHeight;
+}
+
+function typeWriter(text, className = '', delay = 30) {
+  return new Promise(resolve => {
+    if (!pref.motion) {
+      printLine(text, className);
+      resolve();
+      return;
+    }
+    const line = document.createElement('div');
+    if (className) line.className = className;
+    screen.appendChild(line);
+    let i = 0;
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        line.textContent += text[i];
+        sounds.beep(300 + Math.random() * 200, 0.02, 0.005, 'triangle');
+        i++;
+        term.scrollTop = term.scrollHeight;
+      } else {
+        clearInterval(timer);
+        resolve();
+      }
+    }, delay);
+  });
+}
+
+// ---------- Banner
+async function banner() {
+  await typeWriter('╔══════════════════════════════════════════════════════════════════╗', 'success');
+  await typeWriter('║  ██████╗ █████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗           ║', 'success');
+  await typeWriter('║ ██╔════╝██╔══██╗╚██╗ ██╔╝████╗ ████║██╔══██╗╚══███╔╝           ║', 'success');
+  await typeWriter('║ ██║     ███████║ ╚████╔╝ ██╔████╔██║███████║  ███╔╝            ║', 'success');
+  await typeWriter('║ ██║     ██╔══██║  ╚██╔╝  ██║╚██╔╝██║██╔══██║ ███╔╝             ║', 'success');
+  await typeWriter('║ ╚██████╗██║  ██║   ██║   ██║ ╚═╝ ██║██║  ██║███████╗           ║', 'success');
+  await typeWriter('║  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝           ║', 'success');
+  await typeWriter('║                                                               ║', 'success');
+  await typeWriter('║ ██╗   ██╗██╗   ██╗███████╗██╗   ██╗███████╗███████╗██████╗    ║', 'rainbow');
+  await typeWriter('║ ╚██╗ ██╔╝██║   ██║██╔════╝██║   ██║██╔════╝╚══███╔╝╚════██╗   ║', 'rainbow');
+  await typeWriter('║  ╚████╔╝ ██║   ██║███████╗██║   ██║█████╗    ███╔╝    ▄███╔╝   ║', 'rainbow');
+  await typeWriter('║   ╚██╔╝  ██║   ██║╚════██║██║   ██║██╔══╝   ███╔╝     ▀▀══╝    ║', 'rainbow');
+  await typeWriter('║    ██║   ╚██████╔╝███████║╚██████╔╝██║     ███████╗  ██╗       ║', 'rainbow');
+  await typeWriter('║    ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝     ╚══════╝  ╚═╝       ║', 'rainbow');
+  await typeWriter('╚══════════════════════════════════════════════════════════════════╝', 'success');
+  await typeWriter('', '');
+  await typeWriter('🔥 CAYMAZYUSUF72 Terminal++ v2.0 - ÇILGIN MOD HAZIR! 🔥', 'rainbow neon');
+  await typeWriter('💀 Sistem hacklenmeye hazır... Elite Hacker Mode! 💀', 'warning');
+  await typeWriter('', '');
+  printLine('Available commands: help, ping, hack, matrix, nuke, disco, weather, joke, rainbow, cowsay', 'info');
+  printLine('Easter eggs: konami (↑↑↓↓←→←→BA), xyzzy, sudo, rm -rf', 'muted');
+  printLine('Pro tip: Gerçek ping için PHP server gerekir! 🚀', 'warning');
+  printLine('', '');
+}
+
+// ---------- Fake sistem istatistikleri
+let cpuUsage = Math.floor(Math.random() * 20) + 10;
+let ramUsage = Math.floor(Math.random() * 500) + 200;
+
+function updateStats() {
+  cpuUsage += (Math.random() - 0.5) * 5;
+  cpuUsage = Math.max(5, Math.min(95, cpuUsage));
+  ramUsage += (Math.random() - 0.5) * 20;
+  ramUsage = Math.max(100, Math.min(1000, ramUsage));
+
+  qs('#cpu').textContent = Math.floor(cpuUsage);
+  qs('#ram').textContent = Math.floor(ramUsage);
+}
+setInterval(updateStats, 1000);
+
+// ---------- Parçacık sistemi
+function createParticles() {
+  for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.top = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 6 + 's';
+    particles.appendChild(particle);
+  }
+}
+createParticles();
+
+// ---------- Komutlar
+const jokes = [
+  'Programcı neden doktora gitti? Çünkü virüs kapmış! 😄',
+  'Bit neden üzgün? Çünkü byte edilmiş! 🤣',
+  'Java ile C++ kavga etmiş. Sonunda Python araya girmiş! 🐍',
+  'HTML neden ağlıyor? Çünkü CSS onu güzel görmüyor! 😢',
+  'Bug neden saklanıyor? Çünkü debug edilmek istemiyor! 🐛'
+];
+
+const hackingLines = [
+  'Accessing mainframe...',
+  'Bypassing firewall...',
+  'Decrypting passwords...',
+  'Injecting payload...',
+  'Escalating privileges...',
+  'Root access granted!',
+  'FBI is typing...',
+  'Connection terminated. 😎'
+];
+
+// Gerçek PHP Ping fonksiyonu
+async function doPing(host) {
+  printLine(`PING ${host}:`, 'info');
+  printLine('Gerçek ping gönderiliyor...', 'muted');
+  
+  try {
+    // PHP backend'e istek gönder
+    const response = await fetch('ping.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ host: host })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      printLine(`Hata: ${data.error}`, 'err');
+      sounds.error();
+      return;
+    }
+    
+    // Gerçek ping çıktısını göster
+    data.raw_output.forEach(line => {
+      if (line.trim()) {
+        let className = 'muted';
+        if (line.includes('Reply from') || line.includes('64 bytes from')) {
+          className = 'success';
+        } else if (line.includes('timeout') || line.includes('unreachable') || line.includes('failed')) {
+          className = 'err';
+        } else if (line.includes('statistics') || line.includes('packets transmitted')) {
+          className = 'info';
+        }
+        printLine(line, className);
+      }
+    });
+    
+    printLine('', '');
+    
+    // Özet bilgiler
+    if (data.success && data.packets_received > 0) {
+      printLine(`✅ Ping başarılı! ${data.packets_received}/${data.packets_sent} paket ulaştı.`, 'success');
+      if (data.avg_time > 0) {
+        printLine(`📊 Ortalama süre: ${data.avg_time}ms (min: ${data.min_time}ms, max: ${data.max_time}ms)`, 'info');
+      }
+      printLine(`📦 Paket kaybı: %${data.packet_loss_percent}`, data.packet_loss_percent > 0 ? 'warning' : 'success');
+      sounds.success();
+    } else {
+      printLine(`❌ Ping başarısız! Hedef ${host} erişilebilir değil.`, 'err');
+      printLine(`📦 Paket kaybı: %${data.packet_loss_percent}`, 'err');
+      sounds.error();
+    }
+    
+  } catch (error) {
+    printLine(`Ping hatası: ${error.message}`, 'err');
+    printLine('Not: Bu özellik için PHP server gereklidir.', 'warning');
+    printLine('Alternatif: XAMPP, WAMP veya benzeri bir server kullanın.', 'muted');
+    sounds.error();
+  }
+}
+
+// Port Tarama Fonksiyonu
+async function doPortscan(host) {
+  printLine(`🔍 PORT SCAN: ${host}`, 'warning neon');
+  printLine('⚠️  Güvenlik taraması başlatılıyor... ⚠️', 'warning');
+  printLine('Bu işlem birkaç saniye sürebilir...', 'muted');
+  
+  try {
+    const response = await fetch('portscan.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ host: host })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      printLine(`❌ Hata: ${data.error}`, 'err');
+      sounds.error();
+      return;
+    }
+    
+    printLine('', '');
+    printLine('📊 TARAMA SONUÇLARI 📊', 'success neon');
+    printLine(`🎯 Hedef: ${data.host}`, 'info');
+    printLine(`⏰ Tarama zamanı: ${data.scan_time}`, 'muted');
+    printLine(`📋 Toplam port: ${data.total_ports_scanned}`, 'info');
+    printLine('', '');
+    
+    // Açık portları göster
+    if (data.open_count > 0) {
+      printLine('🔓 AÇIK PORTLAR:', 'success');
+      data.open_ports.forEach(port => {
+        printLine(`  Port ${port.port} (${port.service}): ${port.status.toUpperCase()} - ${port.time}`, 'success');
+      });
+      printLine('', '');
+    } else {
+      printLine('🔒 Açık port bulunamadı - Sistem güvenli görünüyor', 'info');
+      printLine('', '');
+    }
+    
+    // Kapalı portlar (sadece sayı)
+    printLine(`🔒 Kapalı/Filtrelenmiş portlar: ${data.closed_count}`, 'muted');
+    printLine('', '');
+    
+    // Güvenlik değerlendirmesi
+    const assessment = data.security_assessment;
+    const riskColor = assessment.risk_level === 'HIGH' ? 'danger' :
+                     assessment.risk_level === 'MEDIUM' ? 'warning' : 'success';
+    
+    printLine('🛡️  GÜVENLİK DEĞERLENDİRMESİ', 'info neon');
+    printLine(`Risk Seviyesi: ${assessment.risk_level}`, riskColor);
+    
+    printLine('⚠️  Uyarılar:', 'warning');
+    assessment.warnings.forEach(warning => {
+      printLine(`  • ${warning}`, 'warning');
+    });
+    
+    printLine('💡 Öneriler:', 'info');
+    assessment.recommendations.forEach(rec => {
+      printLine(`  • ${rec}`, 'info');
+    });
+    
+    // Ses efekti
+    if (data.open_count > 0) {
+      sounds.warning();
+      if (assessment.risk_level === 'HIGH') {
+        setTimeout(() => sounds.error(), 300);
+      }
+    } else {
+      sounds.success();
+    }
+    
+  } catch (error) {
+    printLine(`❌ Port tarama hatası: ${error.message}`, 'err');
+    printLine('Not: Bu özellik için PHP server gereklidir.', 'warning');
+    printLine('Alternatif: XAMPP, WAMP veya benzeri bir server kullanın.', 'muted');
+    sounds.error();
+  }
+}
+
+// Hava Durumu Fonksiyonu
+async function doWeather(city) {
+  printLine(`🌤️ HAVA DURUMU: ${city.toUpperCase()}`, 'info neon');
+  printLine('Meteoroloji verileri alınıyor...', 'muted');
+  
+  try {
+    const response = await fetch('weather.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ city: city })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      printLine(`❌ Hata: ${data.error}`, 'err');
+      sounds.error();
+      return;
+    }
+    
+    printLine('', '');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+    printLine(`${data.icon} ${data.city}, ${data.country}`, 'success neon');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+    printLine('', '');
+    
+    // Ana hava durumu bilgileri
+    printLine(`🌡️  Sıcaklık: ${data.temperature}°C`, 'info');
+    printLine(`🤲 Hissedilen: ${data.feels_like}°C`, 'info');
+    printLine(`☁️  Durum: ${data.condition}`, 'info');
+    printLine(`📝 Açıklama: ${data.description}`, 'muted');
+    printLine('', '');
+    
+    // Detaylı bilgiler
+    printLine('📊 DETAYLI BİLGİLER:', 'warning');
+    printLine(`💧 Nem: %${data.humidity}`, 'info');
+    printLine(`🌪️  Basınç: ${data.pressure} hPa`, 'info');
+    printLine(`💨 Rüzgar: ${data.wind_speed} km/h`, 'info');
+    printLine(`👁️  Görüş: ${data.visibility} km`, 'info');
+    printLine(`⏰ Güncelleme: ${data.timestamp}`, 'muted');
+    printLine('', '');
+    
+    // Öneriler
+    if (data.advice && data.advice.length > 0) {
+      printLine('💡 ÖNERİLER:', 'warning neon');
+      data.advice.forEach(advice => {
+        printLine(`  ${advice}`, 'warning');
+      });
+      printLine('', '');
+    }
+    
+    // Demo mode uyarısı
+    if (data.demo_mode) {
+      printLine('⚠️  Demo mode - Gerçek API için OpenWeatherMap key gerekli', 'muted');
+      printLine('📝 weather.php dosyasında API key güncelleyin', 'muted');
+    }
+    
+    // Ses efekti
+    const temp = data.temperature;
+    if (temp < 0) {
+      sounds.beep(200, 0.2, 0.03, 'sine'); // Soğuk ses
+    } else if (temp > 30) {
+      sounds.beep(800, 0.2, 0.03, 'triangle'); // Sıcak ses
+    } else {
+      sounds.success(); // Normal ses
+    }
+    
+  } catch (error) {
+    printLine(`❌ Hava durumu hatası: ${error.message}`, 'err');
+    printLine('Not: Bu özellik için PHP server gereklidir.', 'warning');
+    printLine('Alternatif: XAMPP, WAMP veya benzeri bir server kullanın.', 'muted');
+    sounds.error();
+  }
+}
+
+// QR Code Oluşturucu Fonksiyonu
+async function doQRCode(text) {
+  printLine(`📱 QR CODE GENERATOR: ${text.substring(0, 50)}${text.length > 50 ? '...' : ''}`, 'info neon');
+  printLine('QR kodu oluşturuluyor...', 'muted');
+  
+  try {
+    const response = await fetch('qrcode.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: text, size: 300 })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      printLine(`❌ Hata: ${data.error}`, 'err');
+      sounds.error();
+      return;
+    }
+    
+    printLine('', '');
+    printLine('✅ QR KOD BAŞARIYLA OLUŞTURULDU!', 'success neon');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+    
+    // İçerik analizi
+    if (data.analysis) {
+      const analysis = data.analysis;
+      printLine(`📋 İçerik: ${analysis.type.toUpperCase()}`, 'info');
+      printLine(`📏 Uzunluk: ${analysis.length} karakter`, 'info');
+      printLine(`⚡ Karmaşıklık: ${analysis.complexity}`, 'info');
+      
+      if (analysis.domain) {
+        printLine(`🌐 Domain: ${analysis.domain}`, 'info');
+      }
+      
+      if (analysis.security) {
+        const securityColor = analysis.security === 'secure' ? 'success' : 'warning';
+        printLine(`🔒 Güvenlik: ${analysis.security}`, securityColor);
+      }
+      
+      if (analysis.security_warning) {
+        printLine(`⚠️ ${analysis.security_warning}`, 'danger');
+      }
+      
+      printLine('', '');
+    }
+    
+    // QR kod görüntüleme
+    if (data.image_data && !data.api_failed) {
+      printLine('🖼️ QR KOD GÖRÜNTÜLEMESİ:', 'warning');
+      printLine('Tarayıcıda görüntülemek için aşağıdaki linke tıklayın:', 'info');
+      
+      // Clickable link oluştur
+      const qrDisplay = document.createElement('div');
+      qrDisplay.style.margin = '10px 0';
+      qrDisplay.style.padding = '10px';
+      qrDisplay.style.border = '1px solid var(--glow)';
+      qrDisplay.style.borderRadius = '5px';
+      qrDisplay.style.textAlign = 'center';
+      qrDisplay.style.background = 'rgba(69,255,90,0.1)';
+      
+      const qrImg = document.createElement('img');
+      qrImg.src = data.image_data;
+      qrImg.style.maxWidth = '200px';
+      qrImg.style.border = '2px solid var(--glow)';
+      qrImg.style.borderRadius = '5px';
+      qrImg.title = 'QR Code - Sağ tık > Resmi Farklı Kaydet';
+      
+      const qrLink = document.createElement('a');
+      qrLink.href = data.image_data;
+      qrLink.download = 'qrcode.png';
+      qrLink.appendChild(qrImg);
+      
+      qrDisplay.appendChild(qrLink);
+      screen.appendChild(qrDisplay);
+      
+      printLine('💾 İndirmek için resme sağ tık > "Resmi Farklı Kaydet"', 'warning');
+      printLine(`🔗 Direkt link: ${data.qr_url}`, 'muted');
+    } else if (data.ascii_qr) {
+      printLine('🎨 ASCII QR KOD (API başarısız):', 'warning');
+      data.ascii_qr.forEach(line => printLine(line, 'success'));
+    }
+    
+    printLine('', '');
+    
+    // Kullanım önerileri
+    if (data.analysis && data.analysis.recommendations) {
+      printLine('💡 ÖNERİLER:', 'info');
+      data.analysis.recommendations.forEach(rec => {
+        printLine(`  • ${rec}`, 'info');
+      });
+      printLine('', '');
+    }
+    
+    // Genel bilgiler
+    printLine('📱 KULLANIM REHBERİ:', 'success');
+    printLine('  • Mobil cihazınızın kamera uygulamasını açın', 'muted');
+    printLine('  • QR kodu ekranda gösterin', 'muted');
+    printLine('  • Otomatik olarak taranacak ve içerik açılacak', 'muted');
+    printLine(`  • Dosya boyutu: ${Math.round(data.file_size / 1024)} KB`, 'muted');
+    printLine(`  • Oluşturulma: ${data.timestamp}`, 'muted');
+    
+    term.scrollTop = term.scrollHeight;
+    sounds.success();
+    
+  } catch (error) {
+    printLine(`❌ QR kod hatası: ${error.message}`, 'err');
+    printLine('Not: Bu özellik için PHP server gereklidir.', 'warning');
+    printLine('Alternatif: XAMPP, WAMP veya benzeri bir server kullanın.', 'muted');
+    sounds.error();
+  }
+}
+
+// Whois Fonksiyonu
+async function doWhois(domain) {
+  printLine(`🔍 WHOIS: ${domain.toUpperCase()}`, 'info neon');
+  printLine('Domain bilgileri sorgulanıyor...', 'muted');
+  
+  try {
+    const response = await fetch('whois.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ domain: domain })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      printLine(`❌ Hata: ${data.error}`, 'err');
+      sounds.error();
+      return;
+    }
+    
+    printLine('', '');
+    printLine('🌐 DOMAIN BİLGİLERİ', 'success neon');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+    
+    const whois = data.whois_info;
+    const dns = data.dns_info;
+    
+    printLine(`📝 Domain: ${data.domain}`, 'info');
+    printLine(`🏢 Registrar: ${whois.registrar}`, 'info');
+    printLine(`📅 Oluşturulma: ${whois.creation_date}`, 'info');
+    printLine(`⏰ Son Güncelleme: ${whois.last_updated}`, 'info');
+    printLine(`💀 Bitiş Tarihi: ${whois.expiration_date}`, 'warning');
+    printLine(`📊 Durum: ${whois.status}`, 'info');
+    
+    printLine('', '');
+    printLine('🌐 DNS BİLGİLERİ', 'info');
+    printLine(`🎯 IP Adresi: ${dns.ip_address}`, 'success');
+    
+    if (dns.mx_records && dns.mx_records.length > 0) {
+      printLine('📧 Mail Sunucuları:', 'info');
+      dns.mx_records.forEach(mx => {
+        printLine(`  • ${mx.host} (öncelik: ${mx.priority})`, 'muted');
+      });
+    }
+    
+    sounds.success();
+    
+  } catch (error) {
+    printLine(`❌ Whois hatası: ${error.message}`, 'err');
+    printLine('Not: Bu özellik için PHP server gereklidir.', 'warning');
+    sounds.error();
+  }
+}
+
+// Kripto Para Fonksiyonu
+async function doCrypto() {
+  printLine('💰 KRİPTO PARA FİYATLARI', 'warning neon');
+  printLine('Piyasa verileri yükleniyor...', 'muted');
+  
+  try {
+    const response = await fetch('crypto.php');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    printLine('', '');
+    printLine('📊 KRİPTO PAZAR DURUMU', 'rainbow neon');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'rainbow');
+    
+    // En popüler 5 kripto göster
+    const cryptos = Object.values(data.prices).slice(0, 5);
+    
+    cryptos.forEach(crypto => {
+      const changeColor = crypto.price_change_percentage_24h >= 0 ? 'success' : 'err';
+      const changeSymbol = crypto.price_change_percentage_24h >= 0 ? '📈' : '📉';
+      
+      printLine(`${crypto.emoji} ${crypto.name} (${crypto.symbol})`, 'info');
+      printLine(`  💵 Fiyat: $${crypto.current_price.toLocaleString()}`, 'success');
+      printLine(`  ${changeSymbol} 24s: %${crypto.price_change_percentage_24h}`, changeColor);
+      printLine('', '');
+    });
+    
+    if (data.demo_mode) {
+      printLine('⚠️ Demo mode - Gerçek fiyatlar için API entegrasyonu yapılabilir', 'muted');
+    }
+    
+    sounds.success();
+    
+  } catch (error) {
+    printLine(`❌ Kripto veri hatası: ${error.message}`, 'err');
+    sounds.error();
+  }
+}
+
+// Hız Testi Fonksiyonu
+async function doSpeedTest() {
+  printLine('🚀 İNTERNET HIZ TESTİ', 'info neon');
+  printLine('Hız testi başlatılıyor... Biraz bekleyin.', 'warning');
+  
+  try {
+    const response = await fetch('speedtest.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    printLine('', '');
+    printLine('📊 HIZ TESTİ SONUÇLARI', 'success neon');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+    
+    const results = data.results;
+    
+    printLine(`⬇️  Download: ${results.download_mbps} Mbps`, 'success');
+    printLine(`⬆️  Upload: ${results.upload_mbps} Mbps`, 'info');
+    printLine(`📶 Ping: ${results.ping_ms} ms`, 'info');
+    printLine(`⭐ Kalite: ${results.connection_quality}`, 'warning');
+    printLine(`⏱️  Test Süresi: ${data.test_duration} saniye`, 'muted');
+    
+    sounds.success();
+    
+  } catch (error) {
+    printLine(`❌ Hız testi hatası: ${error.message}`, 'err');
+    sounds.error();
+  }
+}
+
+// Haberler Fonksiyonu
+async function doNews() {
+  printLine('📰 TEKNOLOJİ HABERLERİ', 'info neon');
+  printLine('RSS feed\'lerden haberler çekiliyor...', 'muted');
+  
+  try {
+    const response = await fetch('news.php');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    printLine('', '');
+    printLine('🔥 GÜNÜN HABERİ', 'rainbow neon');
+    printLine('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'rainbow');
+    
+    if (data.news && data.news.length > 0) {
+      const news = data.news[0];
+      
+      printLine(`📰 ${news.title}`, 'success neon');
+      printLine('', '');
+      printLine(`📝 ${news.description.substring(0, 200)}...`, 'info');
+      printLine('', '');
+      printLine(`🌐 Kaynak: ${news.source}`, 'muted');
+      printLine(`📅 Tarih: ${news.published}`, 'muted');
+      printLine(`🔗 Link: ${news.url}`, 'warning');
+      
+    } else {
+      printLine('❌ Haber bulunamadı', 'err');
+    }
+    
+    if (data.demo_mode) {
+      printLine('', '');
+      printLine('⚠️ Demo mode - RSS feed\'ler erişilemez durumda', 'warning');
+    }
+    
+    sounds.success();
+    
+  } catch (error) {
+    printLine(`❌ Haber yükleme hatası: ${error.message}`, 'err');
+    sounds.error();
+  }
+}
+
+// ASCII Art Figlet Generator
+function generateFiglet(text) {
+  const chars = {
+    'A': ['  █████  ', ' ██   ██ ', ' ███████ ', ' ██   ██ ', ' ██   ██ '],
+    'B': [' ██████  ', ' ██   ██ ', ' ██████  ', ' ██   ██ ', ' ██████  '],
+    'C': [' ██████  ', ' ██      ', ' ██      ', ' ██      ', ' ██████  '],
+    'D': [' ██████  ', ' ██   ██ ', ' ██   ██ ', ' ██   ██ ', ' ██████  '],
+    'E': [' ███████ ', ' ██      ', ' █████   ', ' ██      ', ' ███████ '],
+    'F': [' ███████ ', ' ██      ', ' █████   ', ' ██      ', ' ██      '],
+    'G': [' ██████  ', ' ██      ', ' ██   ██ ', ' ██   ██ ', ' ██████  '],
+    'H': [' ██   ██ ', ' ██   ██ ', ' ███████ ', ' ██   ██ ', ' ██   ██ '],
+    'I': [' ███████ ', '    ██   ', '    ██   ', '    ██   ', ' ███████ '],
+    'J': [' ███████ ', '      ██ ', '      ██ ', ' ██   ██ ', ' ██████  '],
+    'K': [' ██   ██ ', ' ██  ██  ', ' █████   ', ' ██  ██  ', ' ██   ██ '],
+    'L': [' ██      ', ' ██      ', ' ██      ', ' ██      ', ' ███████ '],
+    'M': [' ██   ██ ', ' ███ ███ ', ' ██ █ ██ ', ' ██   ██ ', ' ██   ██ '],
+    'N': [' ██   ██ ', ' ███  ██ ', ' ██ █ ██ ', ' ██  ███ ', ' ██   ██ '],
+    'O': [' ██████  ', ' ██   ██ ', ' ██   ██ ', ' ██   ██ ', ' ██████  '],
+    'P': [' ██████  ', ' ██   ██ ', ' ██████  ', ' ██      ', ' ██      '],
+    'Q': [' ██████  ', ' ██   ██ ', ' ██ █ ██ ', ' ██  ███ ', ' ██████  '],
+    'R': [' ██████  ', ' ██   ██ ', ' ██████  ', ' ██   ██ ', ' ██   ██ '],
+    'S': [' ███████ ', ' ██      ', ' ███████ ', '      ██ ', ' ███████ '],
+    'T': [' ███████ ', '    ██   ', '    ██   ', '    ██   ', '    ██   '],
+    'U': [' ██   ██ ', ' ██   ██ ', ' ██   ██ ', ' ██   ██ ', ' ██████  '],
+    'V': [' ██   ██ ', ' ██   ██ ', ' ██   ██ ', '  ██ ██  ', '   ███   '],
+    'W': [' ██   ██ ', ' ██   ██ ', ' ██ █ ██ ', ' ███ ███ ', ' ██   ██ '],
+    'X': [' ██   ██ ', '  ██ ██  ', '   ███   ', '  ██ ██  ', ' ██   ██ '],
+    'Y': [' ██   ██ ', '  ██ ██  ', '   ███   ', '    ██   ', '    ██   '],
+    'Z': [' ███████ ', '     ██  ', '    ██   ', '   ██    ', ' ███████ '],
+    '0': [' ██████  ', ' ██  ███ ', ' ██ █ ██ ', ' ███  ██ ', ' ██████  '],
+    '1': ['   ███   ', '  ████   ', '    ██   ', '    ██   ', ' ███████ '],
+    '2': [' ██████  ', '      ██ ', ' ██████  ', ' ██      ', ' ███████ '],
+    '3': [' ██████  ', '      ██ ', ' ██████  ', '      ██ ', ' ██████  '],
+    '4': [' ██   ██ ', ' ██   ██ ', ' ███████ ', '      ██ ', '      ██ '],
+    '5': [' ███████ ', ' ██      ', ' ███████ ', '      ██ ', ' ███████ '],
+    '6': [' ██████  ', ' ██      ', ' ███████ ', ' ██   ██ ', ' ██████  '],
+    '7': [' ███████ ', '      ██ ', '     ██  ', '    ██   ', '   ██    '],
+    '8': [' ██████  ', ' ██   ██ ', ' ██████  ', ' ██   ██ ', ' ██████  '],
+    '9': [' ██████  ', ' ██   ██ ', ' ███████ ', '      ██ ', ' ██████  '],
+    ' ': ['         ', '         ', '         ', '         ', '         ']
+  };
+  
+  const lines = ['', '', '', '', ''];
+  for (let char of text) {
+    if (chars[char]) {
+      for (let i = 0; i < 5; i++) {
+        lines[i] += chars[char][i] + ' ';
+      }
+    }
+  }
+  return lines;
+}
+
+// Tren Animasyonu
+async function trainAnimation() {
+  const frames = [
+    '    🚂💨                                          ',
+    '      🚂💨                                        ',
+    '        🚂💨                                      ',
+    '          🚂💨                                    ',
+    '            🚂💨                                  ',
+    '              🚂💨                                ',
+    '                🚂💨                              ',
+    '                  🚂💨                            ',
+    '                    🚂💨                          ',
+    '                      🚂💨                        ',
+    '                        🚂💨                      ',
+    '                          🚂💨                    ',
+    '                            🚂💨                  ',
+    '                              🚂💨                ',
+    '                                🚂💨              ',
+    '                                  🚂💨            ',
+    '                                    🚂💨          ',
+    '                                      🚂💨        ',
+    '                                        🚂💨      ',
+    '                                          🚂💨    '
+  ];
+  
+  printLine('🚉 Tren geliyor! Dikkat! 🚉', 'warning');
+  sounds.warning();
+  
+  for (let i = 0; i < frames.length; i++) {
+    // Son satırı güncelle
+    const lines = screen.querySelectorAll('div');
+    if (lines.length > 0) {
+      lines[lines.length - 1].textContent = frames[i];
+      lines[lines.length - 1].className = 'success neon';
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+    sounds.beep(200 + i * 10, 0.02, 0.005, 'square');
+  }
+  
+  printLine('🎊 Tren gitti! Yolculuk keyifli geçti! 🎊', 'success');
+  sounds.success();
+}
+
+// Konami code
+let konamiCode = [];
+const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+async function run(cmd) {
+  const c = cmd.trim().toLowerCase();
+  const args = c.split(' ');
+
+  switch (args[0]) {
+    case 'help':
+      printLine('═══ ÇILGIN KOMUTLAR ═══', 'rainbow');
+      printLine('help        - Bu yardım menüsü', 'info');
+      printLine('clear       - Ekranı temizle', 'info');
+      printLine('status      - Sistem durumu', 'info');
+      printLine('echo <msg>  - Mesaj yazdır', 'info');
+      printLine('ping <host> - Host ping kontrolü', 'info');
+      printLine('portscan <host> - Port tarama (hacker tool)', 'warning');
+      printLine('figlet <text> - ASCII sanat yazılar', 'success');
+      printLine('calc <işlem> - Hesap makinesi', 'info');
+      printLine('password [uzunluk] - Güvenli şifre üret', 'info');
+      printLine('qrcode <text> - QR kod oluşturucu', 'info');
+      printLine('sl          - Tren animasyonu', 'success');
+      printLine('neofetch    - Sistem bilgileri', 'info');
+      printLine('matrix      - Matrix yağmuru', 'success');
+      printLine('hack        - Hacker simülasyonu', 'warning');
+      printLine('nuke        - Nükleer patlama!', 'danger err');
+      printLine('disco       - Disco modu', 'rainbow');
+      printLine('weather <şehir> - Gerçek hava durumu', 'info');
+      printLine('whois <domain> - Domain bilgileri', 'info');
+      printLine('crypto      - Kripto para fiyatları', 'warning');
+      printLine('speedtest   - İnternet hız testi', 'info');
+      printLine('news        - Teknoloji haberleri (RSS)', 'info');
+      printLine('joke        - Rastgele şaka', 'success');
+      printLine('cowsay <msg> - İnek konuştur', 'muted');
+      printLine('sudo <cmd>  - Süper kullanıcı modu', 'warning');
+      printLine('rm -rf      - Tehlikeli komut!', 'danger');
+      printLine('konami      - Gizli kod', 'muted');
+      printLine('whoami/pwd/ps/top/fortune/date/uptime/ls/cat', 'muted');
+      break;
+
+    case 'clear':
+      screen.innerHTML = '';
+      break;
+
+    case 'status':
+      printLine('🔥 SİSTEM DURUMU 🔥', 'success');
+      printLine(`CPU Kullanımı: ${Math.floor(cpuUsage)}%`, 'info');
+      printLine(`RAM Kullanımı: ${Math.floor(ramUsage)}MB`, 'info');
+      printLine('Ağ Bağlantısı: Aktif', 'success');
+      printLine('Güvenlik: ÇILGIN MOD! 🚨', 'warning');
+      sounds.success();
+      break;
+
+    case 'echo':
+      printLine(cmd.slice(5) || 'echo: mesaj bulunamadı');
+      break;
+
+    case 'ping':
+      if (!args[1]) {
+        printLine('ping: kullanım: ping <host>', 'err');
+        break;
+      }
+      await doPing(args[1]);
+      break;
+
+    case 'portscan':
+      if (!args[1]) {
+        printLine('portscan: kullanım: portscan <host>', 'err');
+        break;
+      }
+      await doPortscan(args[1]);
+      break;
+
+    case 'figlet':
+      const text = cmd.slice(7) || 'HACKER';
+      const figletText = generateFiglet(text.toUpperCase());
+      figletText.forEach(line => printLine(line, 'success neon'));
+      sounds.success();
+      break;
+
+    case 'calc':
+      if (!args[1]) {
+        printLine('calc: kullanım: calc <işlem> (örn: calc 2+2)', 'err');
+        break;
+      }
+      try {
+        const expression = cmd.slice(5).replace(/[^0-9+\-*/().]/g, '');
+        const result = eval(expression);
+        printLine(`${cmd.slice(5)} = ${result}`, 'success');
+        sounds.success();
+      } catch (error) {
+        printLine(`Hesaplama hatası: ${error.message}`, 'err');
+        sounds.error();
+      }
+      break;
+
+    case 'qrcode':
+      if (!args[1]) {
+        printLine('qrcode: kullanım: qrcode <text>', 'err');
+        printLine('Örnek: qrcode https://example.com', 'muted');
+        break;
+      }
+      await doQRCode(cmd.slice(7));
+      break;
+
+    case 'password':
+      const length = parseInt(args[1]) || 16;
+      if (length < 4 || length > 50) {
+        printLine('Şifre uzunluğu 4-50 arasında olmalıdır', 'err');
+        break;
+      }
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+      let password = '';
+      for (let i = 0; i < length; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      printLine(`🔐 Güvenli şifre oluşturuldu (${length} karakter):`, 'info');
+      printLine(password, 'success neon');
+      printLine('Şifreyi güvenli bir yerde saklayın!', 'warning');
+      sounds.success();
+      break;
+
+    case 'sl':
+      await trainAnimation();
+      break;
+
+    case 'neofetch':
+      printLine('🖥️  CAYMAZYUSUF72 Terminal System', 'success neon');
+      printLine('────────────────────────────────', 'muted');
+      printLine('OS: HackerOS Linux 5.15.0-kali', 'info');
+      printLine(`Kernel: ${navigator.userAgent.includes('Windows') ? 'NT 10.0' : 'Linux 5.15.0'}`, 'info');
+      printLine('Shell: terminal++ v2.0', 'info');
+      printLine(`CPU: Intel i${Math.floor(Math.random() * 3) + 7}-${Math.floor(Math.random() * 5000) + 8000}K (${Math.floor(Math.random() * 8) + 4} cores)`, 'info');
+      printLine(`Memory: ${Math.floor(ramUsage)}MB / ${Math.floor(Math.random() * 16 + 8)}GB`, 'info');
+      printLine(`GPU: NVIDIA RTX ${Math.floor(Math.random() * 2000) + 3070}`, 'info');
+      printLine('Network: Gigabit Ethernet', 'success');
+      printLine('Status: HACKER MODE ACTIVE 🔥', 'warning');
+      sounds.success();
+      break;
+
+    case 'matrix':
+      fxMatrixRainToggle();
+      printLine('Matrix yağmuru başlatıldı... 🕶️', 'matrix-rain');
+      sounds.hack();
+      break;
+
+    case 'hack':
+      printLine('🔴 HACKER MODU AKTİF! 🔴', 'danger neon');
+      for (let i = 0; i < hackingLines.length; i++) {
+        setTimeout(async () => {
+          await typeWriter(hackingLines[i], 'success');
+          if (i === hackingLines.length - 1) sounds.warning();
+          else sounds.beep(400 + i * 50, 0.03, 0.01, 'sine');
+        }, i * 800);
+      }
+      fxGlitchScreen();
+      break;
+
+    case 'nuke':
+      printLine('🚨 NÜK LEE R   FUZEE   AK TIF! 🚨', 'danger neon');
+      printLine('Patlama 5 saniye sonra...', 'warning');
+      let countdown = 5;
+      const timer = setInterval(() => {
+        printLine(countdown.toString(), 'danger neon');
+        sounds.warning();
+        countdown--;
+        if (countdown < 0) {
+          clearInterval(timer);
+          fxNuclearExplosion();
+          printLine('💥 BOOOOOOM! 💥', 'rainbow neon');
+          sounds.explosion();
+        }
+      }, 1000);
+      break;
+
+    case 'disco':
+      printLine('🕺 DİSKO MODU AKTİF! 🕺', 'disco neon');
+      fxDiscoMode();
+      sounds.beep(440, 0.1, 0.05, 'sine');
+      setTimeout(() => sounds.beep(550, 0.1, 0.05, 'sine'), 200);
+      break;
+
+    case 'weather':
+      if (!args[1]) {
+        printLine('weather: kullanım: weather <şehir>', 'err');
+        printLine('Örnek: weather istanbul', 'muted');
+        break;
+      }
+      await doWeather(args[1]);
+      break;
+
+    case 'whois':
+      if (!args[1]) {
+        printLine('whois: kullanım: whois <domain>', 'err');
+        printLine('Örnek: whois google.com', 'muted');
+        break;
+      }
+      await doWhois(args[1]);
+      break;
+
+    case 'crypto':
+      await doCrypto();
+      break;
+
+    case 'speedtest':
+      await doSpeedTest();
+      break;
+
+    case 'news':
+      await doNews();
+      break;
+
+    case 'joke':
+      const joke = jokes[Math.floor(Math.random() * jokes.length)];
+      await typeWriter(joke, 'rainbow');
+      sounds.beep(660, 0.1, 0.03, 'sine');
+      break;
+
+    case 'rainbow':
+      printLine('🌈 RAINBOW MODE ACTIVATED! 🌈', 'rainbow neon');
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => printLine('★'.repeat(50), 'rainbow'), i * 100);
+      }
+      break;
+
+    case 'cowsay':
+      const msg = cmd.slice(7) || 'Moo!';
+      printLine(' ' + '_'.repeat(msg.length + 2), 'muted');
+      printLine(`< ${msg} >`, 'success');
+      printLine(' ' + '-'.repeat(msg.length + 2), 'muted');
+      printLine('        \\   ^__^', 'muted');
+      printLine('         \\  (oo)\\_______', 'muted');
+      printLine('            (__)\\       )\\/\\', 'muted');
+      printLine('                ||----w |', 'muted');
+      printLine('                ||     ||', 'muted');
+      sounds.beep(200, 0.1, 0.04, 'triangle');
+      break;
+
+    case 'sudo':
+      if (args.length < 2) {
+        printLine('sudo: komut belirtilmedi', 'err');
+        break;
+      }
+      printLine('🔐 Süper kullanıcı yetkisi alınıyor...', 'warning');
+      await typeWriter('[sudo] password for user: ', 'warning');
+      await typeWriter('********', 'muted');
+      await typeWriter('Yetki onaylandı! ✅', 'success');
+      const sudoCmd = cmd.slice(5);
+      await run(sudoCmd);
+      break;
+
+    case 'rm':
+      if (args[1] === '-rf' && (args[2] === '/' || args[2] === '*')) {
+        printLine('🚨 TEHLİKELİ KOMUT ENGELLENDİ! 🚨', 'danger neon');
+        printLine('Sistem korunuyor... Bu komutu çalıştıramazsın! 😄', 'warning');
+        fxSystemProtection();
+        sounds.error();
+      } else {
+        printLine(`rm: '${args.slice(1).join(' ')}' silindi`, 'muted');
+      }
+      break;
+
+    case 'konami':
+      printLine('🎮 KONAMI KODU BULUNDU! 🎮', 'rainbow neon');
+      fxKonamiReward();
+      break;
+
+    case 'ls':
+      printLine('drwxr-xr-x  user  user   4096  secrets/', 'muted');
+      printLine('-rw-r--r--  user  user   1337  hacker.exe', 'success');
+      printLine('-rw-r--r--  user  user   2048  matrix.dat', 'matrix-rain');
+      printLine('drwxr-xr-x  user  user   4096  disco/', 'disco');
+      printLine('-rwxrwxrwx  user  user  66666  nuke.sh', 'danger');
+      break;
+
+    case 'cat':
+      if (args[1] === 'secrets') {
+        printLine('🔒 Gizli dosya açılıyor...', 'warning');
+        await typeWriter('Terminal++ gizli not: Bu terminal aslında bir oyun! 😉', 'rainbow');
+      } else {
+        printLine(`cat: ${args[1] || 'dosya'}: No such file or directory`, 'err');
+      }
+      break;
+
+    case 'whoami':
+      printLine('user - The Ultimate Hacker 😎', 'success neon');
+      break;
+
+    case 'pwd':
+      printLine('/home/user/matrix/reality/simulation/terminal', 'info');
+      break;
+
+    case 'ps':
+      printLine('PID  COMMAND', 'muted');
+      printLine('1337 matrix_rain', 'matrix-rain');
+      printLine('2048 disco_mode', 'disco');
+      printLine('4096 reality_sim', 'rainbow');
+      printLine('8192 hacker_mode', 'danger');
+      break;
+
+    case 'top':
+      printLine('Tasks: 42 total, 13.37 running', 'info');
+      printLine('%CPU %MEM COMMAND', 'muted');
+      printLine('66.6 13.3 matrix_rain', 'matrix-rain');
+      printLine('42.0 37.7 disco_lights', 'disco');
+      printLine('13.3  7.7 terminal++', 'success');
+      break;
+
+    case 'fortune':
+      const fortunes = [
+        'The best code is no code at all.',
+        'There are only 10 types of people: those who understand binary and those who dont.',
+        'Programming is like sex: one mistake and you have to support it forever.',
+        'Real programmers count from 0.',
+        'There is no place like 127.0.0.1'
+      ];
+      printLine(fortunes[Math.floor(Math.random() * fortunes.length)], 'rainbow');
+      break;
+
+    case 'date':
+      printLine(new Date().toString(), 'info');
+      break;
+
+    case 'uptime':
+      const up = Math.floor(Math.random() * 9999);
+      printLine(`up ${up} minutes, load average: 13.37, 4.20, 0.69`, 'muted');
+      break;
+
+    default:
+      if (c) {
+        printLine(`bash: ${c}: command not found`, 'err');
+        printLine('Try "help" for available commands', 'muted');
+        sounds.error();
+      }
+  }
+}
+
+// ---------- Giriş handling
+cli.addEventListener('keydown', async (e) => {
+  if (e.key === 'Enter' && cli.value.trim()) {
+    const val = cli.value.trim();
+    printLine(`${qs('#p').textContent} ${val}`);
+    cli.value = '';
+    await run(val);
+    sounds.beep(220 + Math.random() * 200, 0.03, 0.01, 'triangle');
+  }
+});
+
+// Konami code detection
+window.addEventListener('keydown', (e) => {
+  konamiCode.push(e.key);
+  if (konamiCode.length > 10) konamiCode.shift();
+
+  if (konamiCode.join(',') === konami.join(',')) {
+    printLine('🎮 KONAMI CODE ACTIVATED! 🎮', 'rainbow neon');
+    fxKonamiReward();
+    konamiCode = [];
+  }
+
+  const k = e.key.toLowerCase();
+  if (k === 'm' && !e.target.matches('input')) {
+    setPref('sound', !pref.sound);
+    qs('#sound').checked = pref.sound;
+    qs('#sound').setAttribute('aria-checked', String(pref.sound));
+    printLine(`Ses ${pref.sound ? 'açık' : 'kapalı'}`, 'info');
+  }
+  if (k === 'a' && !e.target.matches('input')) {
+    setPref('motion', !pref.motion);
+    qs('#motion').checked = pref.motion;
+    qs('#motion').setAttribute('aria-checked', String(pref.motion));
+    printLine(`Animasyon ${pref.motion ? 'açık' : 'kapalı'}`, 'info');
+  }
+  if (k === 'c' && !e.target.matches('input')) {
+    setPref('contrast', !pref.contrast);
+    qs('#contrast').checked = pref.contrast;
+    qs('#contrast').setAttribute('aria-checked', String(pref.contrast));
+    printLine(`Yüksek kontrast ${pref.contrast ? 'açık' : 'kapalı'}`, 'info');
+  }
+  if (k === 'z' && !e.target.matches('input')) {
+    setPref('crazy', !pref.crazy);
+    qs('#crazy').checked = pref.crazy;
+    qs('#crazy').setAttribute('aria-checked', String(pref.crazy));
+    printLine(`Çılgın mod ${pref.crazy ? 'açık' : 'kapalı'}`, 'rainbow');
+  }
+});
+
+// Terminal focus
+term.addEventListener('click', () => cli.focus());
+
+// Hızlı komut çipleri
+qsa('.chip').forEach(b => b.addEventListener('click', () => {
+  cli.value = b.dataset.cmd;
+  cli.focus();
+}));
+
+// ---------- FX: Canvas setup
+const ctx = fx.getContext('2d');
+let W, H;
+function resize() {
+  W = fx.width = window.innerWidth;
+  H = fx.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Matrix Rain
+let rainActive = false;
+let columns = [];
+const matrixGlyphs = 'アカサタナハマヤラワガザダバパ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+
+function initMatrix() {
+  columns = Array(Math.floor(W / 16)).fill(0).map(() => ({
+    y: Math.random() * H,
+    speed: Math.random() * 3 + 2
+  }));
+}
+
+function drawMatrix() {
+  if (!rainActive) return;
+  ctx.fillStyle = 'rgba(6,9,11,0.1)';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#45ff5a';
+  ctx.font = '14px monospace';
+  ctx.shadowColor = '#45ff5a';
+  ctx.shadowBlur = 5;
+
+  columns.forEach((col, i) => {
+    const char = matrixGlyphs[Math.floor(Math.random() * matrixGlyphs.length)];
+    const x = i * 16;
+    ctx.fillText(char, x, col.y);
+    col.y += col.speed;
+    if (col.y > H + Math.random() * 100) col.y = -100;
+  });
+  requestAnimationFrame(drawMatrix);
+}
+
+function fxMatrixRainToggle() {
+  rainActive = !rainActive;
+  if (rainActive) {
+    initMatrix();
+    drawMatrix();
+  } else {
+    ctx.clearRect(0, 0, W, H);
+  }
+}
+
+// Glitch screen effect
+function fxGlitchScreen() {
+  if (!pref.motion) return;
+  document.body.classList.add('glitch');
+  term.classList.add('shake');
+  document.body.classList.add('flash');
+
+  // Random glitch bars
+  for (let i = 0; i < 10; i++) {
+    const bar = document.createElement('div');
+    bar.style.cssText = `position:fixed;left:0;width:100%;height:${Math.random() * 5 + 2}px;background:rgba(255,107,129,0.8);z-index:10;top:${Math.random() * 100}%;mix-blend-mode:difference`;
+    document.body.appendChild(bar);
+    setTimeout(() => bar.remove(), 200);
+  }
+
+  sounds.error();
+  setTimeout(() => {
+    document.body.classList.remove('glitch', 'flash');
+    term.classList.remove('shake');
+  }, 600);
+}
+
+// Nuclear explosion
+function fxNuclearExplosion() {
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle,#fff 0%,#ff6b81 30%,#f97316 60%,transparent 100%);z-index:20;opacity:0;transition:opacity 0.1s';
+  document.body.appendChild(flash);
+
+  setTimeout(() => flash.style.opacity = 1, 0);
+  setTimeout(() => flash.style.opacity = 0, 300);
+  setTimeout(() => flash.remove(), 500);
+
+  // Screen shake
+  document.body.classList.add('shake');
+  setTimeout(() => document.body.classList.remove('shake'), 800);
+
+  // Particle explosion
+  for (let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.style.cssText = `position:fixed;width:4px;height:4px;background:#ff6b81;border-radius:50%;z-index:15;left:50%;top:50%;pointer-events:none`;
+    document.body.appendChild(particle);
+
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 300 + 100;
+    const life = 1000 + Math.random() * 500;
+
+    particle.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1 },
+      { transform: `translate(${Math.cos(angle) * speed}px,${Math.sin(angle) * speed}px) scale(0)`, opacity: 0 }
+    ], { duration: life, easing: 'cubic-bezier(0.25,0.46,0.45,0.94)' });
+
+    setTimeout(() => particle.remove(), life);
+  }
+}
+
+// Disco mode
+function fxDiscoMode() {
+  const disco = document.createElement('div');
+  disco.style.cssText = 'position:fixed;inset:0;background:linear-gradient(45deg,#ff0080,#00ff80,#8000ff,#ff8000);background-size:400% 400%;animation:disco 0.2s infinite;z-index:5;opacity:0.1;mix-blend-mode:overlay;pointer-events:none';
+  document.body.appendChild(disco);
+
+  setTimeout(() => disco.remove(), 3000);
+
+  // Disco lights
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const light = document.createElement('div');
+      light.style.cssText = `position:fixed;width:50px;height:50px;border-radius:50%;z-index:6;pointer-events:none;left:${Math.random() * 100}%;top:${Math.random() * 100}%;background:radial-gradient(circle,rgba(255,255,255,0.8),transparent);animation:pulse 0.5s ease-out forwards`;
+      document.body.appendChild(light);
+      setTimeout(() => light.remove(), 500);
+    }, i * 100);
+  }
+}
+
+// System protection
+function fxSystemProtection() {
+  const shield = document.createElement('div');
+  shield.innerHTML = '🛡️';
+  shield.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:100px;z-index:25;animation:pulse 0.5s ease-out;color:#45ff5a;text-shadow:0 0 20px #45ff5a';
+  document.body.appendChild(shield);
+
+  setTimeout(() => shield.remove(), 1000);
+
+  // Protection particles
+  for (let i = 0; i < 360; i += 30) {
+    const particle = document.createElement('div');
+    particle.style.cssText = `position:fixed;width:3px;height:3px;background:#45ff5a;border-radius:50%;left:50%;top:50%;z-index:20;box-shadow:0 0 10px #45ff5a`;
+    document.body.appendChild(particle);
+
+    particle.animate([
+      { transform: 'translate(-50%,-50%) rotate(0deg) translateX(0px)' },
+      { transform: `translate(-50%,-50%) rotate(${i}deg) translateX(100px)`, opacity: 0 }
+    ], { duration: 800, easing: 'ease-out' });
+
+    setTimeout(() => particle.remove(), 800);
+  }
+}
+
+// Konami reward
+function fxKonamiReward() {
+  printLine('🎊 30 LIVES UNLOCKED! 🎊', 'rainbow neon');
+
+  // Confetti explosion
+  for (let i = 0; i < 100; i++) {
+    setTimeout(() => {
+      const confetti = document.createElement('div');
+      confetti.style.cssText = `position:fixed;width:6px;height:6px;background:${['#ff6b81', '#45ff5a', '#3b82f6', '#f97316', '#d946ef'][Math.floor(Math.random() * 5)]};z-index:30;left:${Math.random() * 100}%;top:-10px;pointer-events:none`;
+      document.body.appendChild(confetti);
+
+      confetti.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateY(110vh) rotate(720deg)', opacity: 0 }
+      ], { duration: 3000 + Math.random() * 2000, easing: 'cubic-bezier(0.25,0.46,0.45,0.94)' });
+
+      setTimeout(() => confetti.remove(), 5000);
+    }, i * 20);
+  }
+
+  // Sound sequence
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => sounds.beep(440 * (Math.pow(2, i / 12)), 0.1, 0.03, 'sine'), i * 100);
+  }
+}
+
+// ---------- Başlatma
+qs('#year').textContent = new Date().getFullYear();
+applyPrefs();
+
+// Başlangıç animasyonu
+setTimeout(async () => {
+  await banner();
+  cli.focus();
+}, 500);
+
+// LED yanıp sönme
+setInterval(() => {
+  led.style.opacity = Math.random() > 0.1 ? 1 : 0.3;
+}, 100);
+
+// Rastgele sistem mesajları (HATA DÜZELTİLDİ)
+const systemMessages = [
+  'System scan completed',
+  'Network optimization running',
+  'Cache cleared successfully',
+  'Firewall status: Active',
+  'Quantum encryption enabled'
+];
+setInterval(() => {
+  if (Math.random() < 0.1) {
+    const msg = systemMessages[Math.floor(Math.random() * systemMessages.length)];
+    printLine(`[SYS] ${msg}`, 'muted');
+  }
+}, 10000);
+
+// Easter egg: typing "xyzzy"
+let easterEgg = '';
+cli.addEventListener('input', () => {
+  easterEgg = (easterEgg + cli.value.slice(-1)).slice(-5);
+  if (easterEgg === 'xyzzy') {
+    printLine('🔮 Magic word detected! Reality.exe has stopped working.', 'rainbow neon');
+    fxGlitchScreen();
+    cli.value = '';
+  }
+});
+</script>
+</body>
+</html>
