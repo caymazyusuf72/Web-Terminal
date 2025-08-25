@@ -109,4 +109,4 @@ ping github.com
 
 ## Lisans
 
-Bu proje eğitim amaçlı oluşturulmuştur. Özgürce kullanabilirsiniz.
+Bu proje eğitim amaçlı oluşturulmuştur. Özgürce kullanabilirsiniz.Her projede olabilceği gibi bu projede de hata olabilir yorumlamadan eleştirmeden önce tam okuyun .
